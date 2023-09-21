@@ -1,35 +1,109 @@
 ---
 title: "My Presentation Title"
-subtitle: "A template file for Quarto revealjs slides"
-author: "Author Name"
+subtitle: "Data Visualisation Workshop"
+author: "Nicola Rennie"
+footer: "[nrennie.github.io/chicas-data-viz-workshop](https://nrennie.github.io/chicas-data-viz-workshop)"
 format:
   LUstyle-revealjs:
     self-contained: true
+execute: 
+  eval: true
+  echo: false
+  warning: false
 ---
 
-## Quarto
+## Introduction
 
-Quarto enables you to weave together content and executable code into a finished presentation.
-To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+This session will cover
 
-## Logo
+## RSS Data Visualisation Guide
 
-If you'd like to change the logo in the bottom right corner, change the `logo: "LUlogo.png"` to `logo: "LMSlogo.png"` or `logo: "CHICASlogo.png"` in the `_extensions/.../LUslides/_extension.yml` file.
+![](images/guide-screenshot.png){fig-align="center" fig-alt="Screenshot of data vis guide homepage" width="70%"}
 
-## Code
+{{< fa globe >}} [royal-statistical-society.github.io/datavisguide](https://royal-statistical-society.github.io/datavisguide/)
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+{{< fa brands github >}} [github.com/royal-statistical-society/datavisguide](https://github.com/royal-statistical-society/datavisguide)
+
+# Tips {background-color="#D9DBDB"}
 
 ```{r}
-#| echo: true
-1 + 1
+#| label: setup
+library(ggplot2)
+library(RColorBrewer)
+theme_set(theme_grey(base_size = 28))
 ```
 
-You can also add `text marked as code`! 
+## Why should you care?
 
-# New topic! {background-color="#D9DBDB"}
+## A pie chart example
 
-To make a slide like this, use:
+```{r}
+#| label: pie
+pie(x = c(11, 1), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"))
+```
 
-    # Section title {background-color="#D9DBDB"}
+## Choosing a chart type
+
+include screenshot
+
+what is the purpose of the chart
+
+## Elements of Charts
+
+::: columns
+::: {.column width="33%"}
+-   Layout
+-   Aspect ratio
+-   Lines
+-   Points
+:::
+
+::: {.column width="33%"}
+-   Colours
+-   Axes
+-   Symbols
+-   Legends
+:::
+
+::: {.column width="33%"}
+-   Orientation
+-   Auxiliary elements
+-   Dimensionality
+:::
+:::
+
+## Colours
+
+## Fonts
+
+## Key points
+
+* Charts should have a purpose
+
+## Useful resources
+
+* https://blog.datawrapper.de/
+
+* 
+
+## Favourite charts
+
+* https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html
+
+* 
+
+
+# Your turn! {background-color="#D9DBDB"}
+
+## Exercise 1
+
+In groups, discuss the following chart. How could you improve it?
+
+*add image and countdown timer*
+
+https://medium.economist.com/mistakes-weve-drawn-a-few-8cdd8a42d368
+
+## Exercise 2
+
+Bring your own chart, or use some tidytuesday data
 
