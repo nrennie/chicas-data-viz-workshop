@@ -72,7 +72,53 @@ what is the purpose of the chart
 :::
 :::
 
+## Layouts
+
+## Lines
+
+::: columns
+::: {.column width="50%"}
+- Suggest an order
+- Suggest continuity
+:::
+
+::: {.column width="50%"}
+```{r}
+ggplot(data.frame(x = LETTERS[1:5], y = c(1, 4, 2, 5, 9)),
+       aes(x = x, y = y)) +
+  geom_col() +
+  geom_line(aes(group = 1), linewidth = 1) +
+  labs(subtitle = "(Don't do this!)")
+```
+:::
+:::
+
+
+
 ## Colours
+
+Why use colours in data visualisation?
+
+-   Colours should serve a purpose, e.g. discerning groups of data
+
+-   Colours can highlight or emphasise parts of your data.
+
+-   Not always the most effective for, e.g. communicating differences between variables.
+
+## Colours
+
+Different types of colour palettes
+
+![](images/styling-palettes.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="70%"}
+
+## Colours
+
+Check for accessibility issues
+
+## Legends
+
+-   Should not use up valuable space for data
+-   May be integrated into the figure
 
 ## Fonts
 
