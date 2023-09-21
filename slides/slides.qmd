@@ -1,0 +1,35 @@
+---
+title: "My Presentation Title"
+subtitle: "A template file for Quarto revealjs slides"
+author: "Author Name"
+format:
+  LUstyle-revealjs:
+    self-contained: true
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished presentation.
+To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+
+## Logo
+
+If you'd like to change the logo in the bottom right corner, change the `logo: "LUlogo.png"` to `logo: "LMSlogo.png"` or `logo: "CHICASlogo.png"` in the `_extensions/.../LUslides/_extension.yml` file.
+
+## Code
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+#| echo: true
+1 + 1
+```
+
+You can also add `text marked as code`! 
+
+# New topic! {background-color="#D9DBDB"}
+
+To make a slide like this, use:
+
+    # Section title {background-color="#D9DBDB"}
+
