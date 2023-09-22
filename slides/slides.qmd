@@ -29,11 +29,76 @@ This session will cover
 ```{r}
 #| label: setup
 library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(kableExtra)
 library(RColorBrewer)
+library(datasauRus)
 theme_set(theme_grey(base_size = 28))
 ```
 
-## Why should you care?
+## Why visualise data?
+
+::: columns
+::: {.column width="50%"}
+Data visualisation has two main purposes:
+
+* Exploratory data analysis and identifying data issues
+* Communicating insights and results
+
+:::
+
+::: {.column width="50%"}
+![](images/data_viz_books.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="90%"}
+:::
+:::
+
+
+## Exploratory data visualisation
+
+Because summary statistics aren't enough...
+
+::: columns
+::: {.column width="50%"}
+
+```{r}
+dino_data <- datasaurus_dozen |> 
+  filter(dataset %in% c("dino", "slant_up")) |>
+  mutate(dataset = case_when(
+    dataset == "dino" ~ "A",
+    dataset == "slant_up" ~ "B"
+  ))
+
+dino_data |> 
+  group_by(dataset) |> 
+  summarise(mean_x = mean(x),
+            mean_y = mean(y),
+            sd_x = sd(x),
+            sd_y = sd(y)) |> 
+  pivot_longer(-1, names_to = "Dataset") %>%
+  pivot_wider(names_from = 1, values_from = value) |> 
+  kbl() |> 
+  kable_styling("striped")
+```
+
+:::
+
+::: {.column width="50%" .fragment}
+
+```{r}
+#| fig-height: 6
+ggplot(data = dino_data,
+       mapping = aes(x = x, y = y))+
+  geom_point() +
+  facet_wrap(~dataset, ncol = 1) +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+:::
+:::
+
+## Communicating insights with data visualisation
 
 ## A pie chart example
 
