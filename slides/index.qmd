@@ -1,5 +1,5 @@
 ---
-title: "Communicating Data with Charts"
+title: "Communicating with Charts"
 subtitle: "Data Visualisation Workshop"
 author: "Nicola Rennie<br><small>1 November 2023</small>"
 footer: "[nrennie.github.io/chicas-data-viz-workshop](https://nrennie.github.io/chicas-data-viz-workshop)"
@@ -87,11 +87,11 @@ dino_data |>
 
 :::
 
-::: {.column width="50%" .fragment}
+::: {.column width="50%" .fragment .center}
 
 ```{r}
-#| fig-width: 6
-#| fig-height: 3
+#| fig-width: 8
+#| fig-height: 4
 ggplot(data = dino_data,
        mapping = aes(x = x, y = y))+
   geom_point(size = 2) +
@@ -104,6 +104,17 @@ ggplot(data = dino_data,
 :::
 
 ## Communicating insights with data visualisation
+
+* 
+
+
+## Communicating insights with data visualisation
+
+John Snow collected data on cholera deaths and created a visualisation where the number of deaths was represented by the height of a bar at the corresponding address in London. This visualisation showed that the deaths clustered around Broad Street, which helped identify the cause of the cholera transmission, the Broad Street water pump.
+
+![](images/Snow-cholera-map.jpg){fig-align="center" fig-alt="John Snow cholera map" width=60%}
+
+Snow. 1854.
 
 # Tips for better charts {background-color="#D9DBDB"}
 
@@ -147,7 +158,7 @@ pie(x = c(11, 1), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
 ```{r}
 #| label: pie-even
 par(mai = c(0, 0, 0, 0))
-pie(x = c(6.5, 5.5), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"))
+pie(x = c(6.5, 5.5), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
 ```
 
 :::
@@ -221,9 +232,26 @@ Different types of colour palettes
 
 ![](images/styling-palettes.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="70%"}
 
+
 ## Colours
 
 Check for accessibility issues
+
+## Colours
+
+::: columns
+::: {.column width="50%"}
+* In base R via {RColorBrewer}: `brewer.pal(4, "Dark2")`
+
+* In {ggplot2}, `scale_fill_brewer()`, `scale_fill_distiller()`, `scale_colour_brewer()`, `scale_fcolour_distiller()`.
+:::
+
+::: {.column width="50%"}
+![[colorbrewer2.org](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3)](images/colorbrewer.png){fig-alt="Screenshot of colorbrewer2.org" width="100%"}
+:::
+
+:::
+
 
 ## Legends
 
@@ -238,9 +266,24 @@ Check for accessibility issues
 
 ## Useful resources
 
-* https://blog.datawrapper.de/
+::: columns
+::: {.column width="50%"}
+* Fundamentals of data visualization: [clauswilke.com/dataviz](https://clauswilke.com/dataviz/)
 
-* 
+* R Graphics Cookbook: [r-graphics.org](https://r-graphics.org/)
+
+* #TidyTuesday: [github.com/rfordatascience/tidytuesday](https://github.com/rfordatascience/tidytuesday)
+
+* DataWrapper Blog: [blog.datawrapper.de](https://blog.datawrapper.de/)
+:::
+
+::: {.column width="50%"}
+
+![](images/tt.png){fig-alt="TidyTuesday logo" width="80%"}
+
+:::
+
+:::
 
 ## Good charts don't have to be boring!
 
@@ -306,11 +349,38 @@ countdown::countdown(minutes = 5,
 
 ## Exercise 2
 
-example chart - make it better
+This data set is from a study published in 1757 in A Treatise on the Scurvy in Three Parts, by James Lind.
 
-https://github.com/rfordatascience/tidytuesday/blob/master/data/2023/2023-10-24/readme.md
+"*Pages 149-153 are a rare gem among what can be generously described as 400+ pages of evidence-free blathering, and these 4 pages may represent the first report of a controlled clinical trial.*"
 
-Make this chart better
+```{r}
+#| label: scurvy-data
+library(medicaldata)
+data("scurvy")
+kable(scurvy) |> 
+  kable_styling() |> 
+  scroll_box(width = "100%", height = "50%")
+```
+
+## Exercise 2
+
+Edit the code to improve this chart:
+
+```{r}
+#| label: ex-2
+#| echo: true
+#| output-location: column
+library(ggplot2)
+library(medicaldata)
+data("scurvy")
+
+ggplot(data = scurvy) +
+  geom_col(mapping = aes(
+    x = study_id,
+    y = gum_rot_d6,
+    fill = treatment
+  ))
+```
 
 
 ```{r}
@@ -329,7 +399,11 @@ countdown::countdown(minutes = 13,
 
 ## Exercise 3
 
-Bring your own chart!, or use some tidytuesday data
+Bring your own chart! (Or make a new one)
+
+* `library(medicaldata)`
+
+* #TidyTuesday: [github.com/rfordatascience/tidytuesday](https://github.com/rfordatascience/tidytuesday)
 
 ## Workshop resources
 
