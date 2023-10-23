@@ -4,7 +4,7 @@ version: 0.0.2
 contributes:
   formats: 
     revealjs:
-      logo: LUlogo.png
+      logo: CHICASlogo.png
       theme: LUstyle.scss
       height: 900
       width: 1600

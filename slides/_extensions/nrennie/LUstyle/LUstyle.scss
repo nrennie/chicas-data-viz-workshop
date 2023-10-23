@@ -72,7 +72,7 @@ section.has-dark-background a, section.has-dark-background a:hover {
 .reveal .footer {
   color: #000000;
   font-family: $font-family-sans-serif;
-  padding-bottom: 25px;
+  padding-bottom: 10px;
 }
 
 .reveal .slide-logo {
@@ -98,4 +98,8 @@ section.has-dark-background a, section.has-dark-background a:hover {
 
 .right {
   text-align: right !important
+}
+
+.center {
+  text-align: center !important
 }
