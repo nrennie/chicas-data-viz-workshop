@@ -1,0 +1,358 @@
+---
+title: "Communicating Data with Charts"
+subtitle: "Data Visualisation Workshop"
+author: "Nicola Rennie<br><small>1 November 2023</small>"
+footer: "[nrennie.github.io/chicas-data-viz-workshop](https://nrennie.github.io/chicas-data-viz-workshop)"
+format:
+  LUstyle-revealjs:
+    self-contained: true
+execute: 
+  eval: true
+  echo: false
+  warning: false
+---
+
+## Introduction
+
+This session will cover:
+
+* ways 
+
+* examples (mainly built-in R)
+
+* discussions
+
+* you make charts
+
+## RSS Data Visualisation Guide
+
+[royal-statistical-society.github.io/datavisguide](https://royal-statistical-society.github.io/datavisguide/)
+
+![](images/guide-screenshot.png){fig-align="center" fig-alt="Screenshot of data vis guide homepage" width="50%"}
+
+```{r}
+#| label: setup
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(kableExtra)
+library(RColorBrewer)
+library(datasauRus)
+theme_set(theme_grey(base_size = 36))
+```
+
+## Why visualise data?
+
+::: columns
+::: {.column width="50%"}
+Data visualisation has two main purposes:
+
+* Exploratory data analysis and identifying data issues
+* Communicating insights and results
+
+:::
+
+::: {.column width="50%"}
+![](images/data_viz_books.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="90%"}
+:::
+:::
+
+
+## Exploratory data visualisation
+
+Because summary statistics aren't enough...
+
+::: columns
+::: {.column width="50%"}
+
+```{r}
+dino_data <- datasaurus_dozen |> 
+  filter(dataset %in% c("dino", "slant_up")) |>
+  mutate(dataset = case_when(
+    dataset == "dino" ~ "A",
+    dataset == "slant_up" ~ "B"
+  ))
+
+dino_data |> 
+  group_by(dataset) |> 
+  summarise(mean_x = mean(x),
+            mean_y = mean(y),
+            sd_x = sd(x),
+            sd_y = sd(y)) |> 
+  pivot_longer(-1, names_to = "Dataset") %>%
+  pivot_wider(names_from = 1, values_from = value) |> 
+  kbl() |> 
+  kable_styling("striped")
+```
+
+:::
+
+::: {.column width="50%" .fragment}
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3
+ggplot(data = dino_data,
+       mapping = aes(x = x, y = y))+
+  geom_point(size = 2) +
+  facet_wrap(~dataset, ncol = 2) +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+:::
+:::
+
+## Communicating insights with data visualisation
+
+# Tips for better charts {background-color="#D9DBDB"}
+
+## Choosing a chart type
+
+What is the purpose of the chart?
+
+. . . 
+
+![](images/visual-vocabulary.png){fig-align="center" fig-alt="Screenshot of visual vocabulary website" width="70%"}
+::: {.center}
+[ft-interactive.github.io/visual-vocabulary](https://ft-interactive.github.io/visual-vocabulary/)
+:::
+
+## Why do people hate pie charts?
+
+![](images/hate.gif){fig-align="center" fig-alt="Taylor Swift hate gif" width=60%}
+
+::: {.center}
+
+<small>Source: <a href="https://giphy.com/gifs/taylor-swift-haters-gonna-hate-gon-LOWLRHs42LPUDtal3m">giphy.com</a></small>
+
+:::
+
+## Why do people hate pie charts?
+
+::: columns
+
+::: {.column}
+
+```{r}
+#| label: pie-uneven
+par(mai = c(0, 0, 0, 0))
+pie(x = c(11, 1), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
+```
+
+:::
+
+::: {.column .fragment}
+
+```{r}
+#| label: pie-even
+par(mai = c(0, 0, 0, 0))
+pie(x = c(6.5, 5.5), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"))
+```
+
+:::
+
+:::
+
+## Why do people hate pie charts?
+
+![](images/the-sun.jpg){fig-align="center" fig-alt="The Sun front page showing the Boris Johnson pie chart" width="65%"}
+
+## Elements of charts
+
+::: columns
+::: {.column width="33%"}
+-   Layout
+-   Aspect ratio
+-   Lines
+-   Points
+:::
+
+::: {.column width="33%"}
+-   Colours
+-   Axes
+-   Symbols
+-   Legends
+:::
+
+::: {.column width="33%"}
+-   Orientation
+-   Auxiliary elements
+-   Dimensionality
+:::
+:::
+
+## Layouts
+
+## Lines
+
+::: columns
+::: {.column width="50%"}
+- Suggest an order
+- Suggest continuity
+:::
+
+::: {.column width="50%"}
+```{r}
+ggplot(data.frame(x = LETTERS[1:5], y = c(1, 4, 2, 5, 9)),
+       aes(x = x, y = y)) +
+  geom_col() +
+  geom_line(aes(group = 1), linewidth = 1) +
+  labs(subtitle = "(Don't do this!)")
+```
+:::
+:::
+
+
+
+## Colours
+
+Why use colours in data visualisation?
+
+-   Colours should serve a purpose, e.g. discerning groups of data
+
+-   Colours can highlight or emphasise parts of your data.
+
+-   Not always the most effective for, e.g. communicating differences between variables.
+
+## Colours
+
+Different types of colour palettes
+
+![](images/styling-palettes.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="70%"}
+
+## Colours
+
+Check for accessibility issues
+
+## Legends
+
+-   Should not use up valuable space for data
+-   May be integrated into the figure
+
+## Fonts
+
+## Key points
+
+* Charts should have a purpose
+
+## Useful resources
+
+* https://blog.datawrapper.de/
+
+* 
+
+## Good charts don't have to be boring!
+
+::: columns
+::: {.column}
+![Cara Thompson (cararthompson.com)](https://raw.githubusercontent.com/cararthompson/tidytuesdays/main/plots/202209_lego.png){fig-alt="Stacked diverging bar chart of lego colours" width="100%"}
+:::
+
+::: {.column .fragment}
+![Cedric Scherer (cedricscherer.com)](https://www.cedricscherer.com/img/gallery-tidytuesday//TidyTuesday_Week_2020_41_NCAA_Womens_Basketball.jpg){fig-alt="small multiples are charts of college basketball" width="100%"}
+:::
+:::
+
+## Good charts don't have to be boring!
+
+::: columns
+::: {.column}
+![Tanya Shapiro (tanyaviz.com)](https://tanyaviz.com/plots/scotus-justice-confirmations.png){fig-alt="Supreme court justice chart" width="100%"}
+:::
+
+::: {.column .fragment}
+![Dan Oehm (gradientdescending.com)](https://raw.githubusercontent.com/doehm/tidytues/main/scripts/2023/week-23-energy/energy.png){fig-alt="Sloped area chart" width="100%"}
+:::
+:::
+
+# Your turn! {background-color="#D9DBDB"}
+
+## Exercise 1
+
+In groups, discuss the following chart. How could you improve it?
+
+::: columns
+
+::: {.column}
+![](images/economist1.png){fig-align="center" fig-alt="Bar chart from the economist" width=80%}
+:::
+
+::: {.column .fragment}
+![](images/economist2.png){fig-align="center" fig-alt="Improved bar chart from the economist" width=80%}
+:::
+
+:::
+
+::: {.fragment}
+
+<small>Source: <a href="https://medium.economist.com/mistakes-weve-drawn-a-few-8cdd8a42d368">medium.economist.com/mistakes-weve-drawn-a-few-8cdd8a42d368</a></small>
+
+:::
+
+```{r}
+#| label: ex-1-timer
+countdown::countdown(minutes = 5,
+                    color_border = "#b20e10",
+                    color_text = "#b20e10",
+                    color_running_text = "white",
+                    color_running_background = "#b20e10",
+                    color_finished_text = "#b20e10",
+                    color_finished_background = "white",
+                    top = 0,
+                    margin = "1.2em",
+                    font_size = "2em")
+```
+
+## Exercise 2
+
+example chart - make it better
+
+https://github.com/rfordatascience/tidytuesday/blob/master/data/2023/2023-10-24/readme.md
+
+Make this chart better
+
+
+```{r}
+#| label: ex-2-timer
+countdown::countdown(minutes = 13,
+                    color_border = "#b20e10",
+                    color_text = "#b20e10",
+                    color_running_text = "white",
+                    color_running_background = "#b20e10",
+                    color_finished_text = "#b20e10",
+                    color_finished_background = "white",
+                    top = 0,
+                    margin = "1.2em",
+                    font_size = "2em")
+```
+
+## Exercise 3
+
+Bring your own chart!, or use some tidytuesday data
+
+## Workshop resources
+
+::: columns
+
+::: {.column}
+GitHub: [github.com/nrennie/chicas-data-viz-workshop](https://github.com/nrennie/chicas-data-viz-workshop)
+
+<br>
+
+Slides: [nrennie.github.io/chicas-data-viz-workshop](https://nrennie.github.io/chicas-data-viz-workshop)
+:::
+
+::: {.column .center}
+
+![](images/hate.gif){fig-align="center" fig-alt="Taylor Swift hate gif" width=60%}
+
+<small>Source: <a href="https://giphy.com/gifs/taylor-swift-haters-gonna-hate-gon-LOWLRHs42LPUDtal3m">giphy.com</a></small>
+
+:::
+
+:::
+
+
+
+
