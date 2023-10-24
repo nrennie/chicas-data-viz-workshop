@@ -35,10 +35,11 @@ This session will include:
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(tibble)
 library(kableExtra)
 library(RColorBrewer)
 library(datasauRus)
-theme_set(theme_grey(base_size = 32))
+theme_set(theme_grey(base_size = 22))
 ```
 
 ## Why visualise data?
@@ -157,7 +158,7 @@ Try: [ft-interactive.github.io/visual-vocabulary](https://ft-interactive.github.
 
 ## Why do people hate pie charts?
 
-![](images/hate.gif){fig-align="center" fig-alt="Taylor Swift hate gif" width=50%}
+![](images/hate.gif){fig-align="center" fig-alt="Taylor Swift hate gif" width="50%"}
 
 ::: {.center}
 
@@ -223,9 +224,122 @@ pie(x = c(6.5, 5.5), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 
 :::
 :::
 
-## Layouts
+## Layouts, aspect ratios, and axes
 
-facet layout example
+```{r}
+#| label: hist1
+set.seed(1234)
+n <- 20
+facet_df <- tibble(grp = rep(LETTERS[1:5], each = n),
+                   x = c(rnorm(n, 2),
+                         rnorm(n, 1),
+                         rnorm(n, 5),
+                         rnorm(n, 2, 4),
+                         rnorm(n, 2, 0.5)))
+ggplot(facet_df, aes(x = x, fill = grp)) +
+  geom_density(alpha = 0.5)
+```
+
+## Layouts, aspect ratios, and axes
+
+```{r}
+#| label: hist2
+ggplot(facet_df, aes(x = x, fill = grp)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~grp, nrow = 1)
+```
+
+## Layouts, aspect ratios, and axes
+
+```{r}
+#| label: hist3
+ggplot(facet_df, aes(x = x, fill = grp)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~grp, ncol = 1, strip.position = "left")
+```
+
+## Layouts, aspect ratios, and axes
+
+Should the y axis start at 0?
+
+. . . 
+
+```{r}
+#| label: axes-zero
+#| layout-ncol: 2
+plot_data <- data.frame(
+  type = factor(
+    c("Our product", "Competitor"),
+    levels = c("Our product", "Competitor")
+  ),
+  value = c(220, 210)
+)
+
+# Original plot
+ggplot(plot_data) +
+  geom_col(
+    mapping = aes(x = type, y = value),
+    fill = "lightblue",
+    colour = "black"
+  ) +
+  scale_y_continuous(breaks = seq(0, 220, by = 20), expand = c(0, 0)) +
+  labs(x = "", y = "")
+
+# Offset the y axis
+offset <- 208
+ggplot(plot_data) +
+  geom_col(
+    mapping = aes(x = type, y = value - offset),
+    fill = "lightblue",
+    colour = "black"
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 14, by = 2),
+    labels = seq(0 + offset, 14 + offset, by = 2),
+    expand = c(0, 0)
+  ) +
+  labs(x = "", y = "")
+```
+
+## Layouts, aspect ratios, and axes
+
+They don't *always* have to start at zero...
+
+```{r}
+#| label: temp
+#| fig-align: center
+tsibbledata::global_economy |> 
+  dplyr::filter(Country %in% c("France", "United Kingdom")) |> 
+  dplyr::select(Year, Population, Country) |> 
+  ggplot() +
+  geom_line(aes(x = Year, y = Population / 1000000, colour = Country)) +
+  labs(y = "Population (millions)") +
+  theme(legend.position = c(0.8, 0.2),
+        legend.background = element_rect(fill = "transparent"),
+        legend.key = element_rect(fill = "transparent"))
+```
+
+## Layouts, aspect ratios, and axes
+
+Order categories appropriately...
+
+```{r}
+#| label: cat-order
+#| layout-ncol: 2
+#| fig-height: 6
+diamonds |> 
+  mutate(cut = as.character(cut)) |> 
+  ggplot() +
+  geom_bar(aes(x = cut)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+diamonds |> 
+  mutate(cut = as.character(cut),
+         cut = factor(cut, levels = c("Fair", "Good", "Very Good", "Premium", "Ideal"))) |> 
+  ggplot() +
+  geom_bar(aes(x = cut)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
 ## Lines
 
@@ -313,6 +427,8 @@ colorblindr::cvd_grid(g)
 * In base R via {RColorBrewer}: `brewer.pal(4, "Dark2")`
 
 * In {ggplot2}, `scale_fill_brewer()`, `scale_fill_distiller()`, `scale_colour_brewer()`, `scale_fcolour_distiller()`.
+
+* Alternatives to `theme_grey()`!
 :::
 
 ::: {.column width="50%"}
@@ -321,21 +437,80 @@ colorblindr::cvd_grid(g)
 
 :::
 
-
 ## Legends
-
-```{r}
-theme_set(theme_grey(base_size = 32))
-```
 
 -   Should not use up valuable space for data
 -   May be integrated into the figure
 
+```{r}
+#| label: legend1
+#| layout-ncol: 2
+theme_set(theme_minimal(base_size = 22))
+x <- EuStockMarkets
+plot_data <- data.frame(
+  time = as.vector(time(x)),
+  index = rep(colnames(x), rep(nrow(x), ncol(x))),
+  value = as.vector(x),
+  stringsAsFactors = TRUE
+)
+plot_data$index2 <- plot_data$index
+
+g <- ggplot(plot_data, aes(
+  x = time, y = value,
+  group = index, color = index, label = index2
+)) +
+  geom_line() +
+  xlab("year") +
+  ylab("Stock index")
+g
+
+y <- plot_data[rev(order(plot_data$time)), ]
+y <- y[!duplicated(y$index), ] 
+y$index2 <- y$index 
+levels(y$index2)[levels(y$index2) == "FTSE"] <- "\n\nFTSE"
+
+g +
+  geom_text(data = y, hjust = "left", nudge_x = 0.1, size = 4.5) +
+  theme(legend.position = "none")
+```
+
+## Legends
+
+or use {ggtext} to colour font in the subtitle...
+
+![](https://raw.githubusercontent.com/nrennie/tidytuesday/main/2023/2023-02-07/20230207.png){fig-align="center" fig-alt="Line chart of stick performance" width="98%"}
+
 ## Fonts
+
+<p style="font-family: Arial; font-size: 36pt;">Arial: Does it pass the 1Il test?</p>
+
+<br>
+
+<p style="font-family: Times New Roman; font-size: 36pt;">Times New Roman: Does it pass the 1Il test?</p>
+
+<br>
+
+<p style="font-family: Courier New; font-size: 36pt;">Courier New: Does it pass the 1Il test?</p>
+
+## Fonts
+
+::: incremental
+-   Font size: larger fonts are (usually) better
+
+-   Font colour: ensure sufficient contrast
+
+-   Font face: highlight text using bold font, avoid italics
+
+-   Font family: choose a clear font with distinguishable features (pick something familiar)
+:::
 
 ## Key points
 
 * Charts should have a purpose
+
+* Actively design visualisations 
+
+* Default settings aren't always the best choices
 
 ## Useful resources
 
@@ -362,7 +537,7 @@ theme_set(theme_grey(base_size = 32))
 
 ::: columns
 ::: {.column .fragment}
-![Cara Thompson (cararthompson.com)](https://raw.githubusercontent.com/cararthompson/tidytuesdays/main/plots/202209_lego.png){fig-alt="Stacked diverging bar chart of lego colours" width="98%"}
+![Cara Thompson (cararthompson.com)](https://raw.githubusercontent.com/cararthompson/tidytuesdays/main/plots/202209_lego.png){fig-alt="Stacked diverging bar chart of lego colours" width="95%"}
 :::
 
 ::: {.column .fragment}
@@ -524,9 +699,10 @@ Slides: [nrennie.github.io/chicas-data-viz-workshop](https://nrennie.github.io/c
 
 ::: {.column .center}
 
-![](images/hate.gif){fig-align="center" fig-alt="Taylor Swift hate gif" width=60%}
 
-<small>Source: <a href="https://giphy.com/gifs/taylor-swift-haters-gonna-hate-gon-LOWLRHs42LPUDtal3m">giphy.com</a></small>
+Questions?
+
+[n.rennie@lancaster.ac.uk](mailto:n.rennie@lancaster.ac.uk)
 
 :::
 
