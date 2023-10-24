@@ -14,15 +14,15 @@ execute:
 
 ## Introduction
 
-This session will cover:
+This session will include:
 
-* ways 
+* why you should visualise data;
 
-* examples (mainly built-in R)
+* some guidelines for making better charts;
 
-* discussions
+* examples of charts made in R;
 
-* you make charts
+* a chance for you to make charts!
 
 ## RSS Data Visualisation Guide
 
@@ -38,7 +38,7 @@ library(tidyr)
 library(kableExtra)
 library(RColorBrewer)
 library(datasauRus)
-theme_set(theme_grey(base_size = 36))
+theme_set(theme_grey(base_size = 32))
 ```
 
 ## Why visualise data?
@@ -105,33 +105,59 @@ ggplot(data = dino_data,
 
 ## Communicating insights with data visualisation
 
-* 
+**Grab attention**
 
+Visualisations stand out. If a reader is short on time or uncertain about whether a document is of interest, an attention-grabbing visualisation may entice them to start reading.
+
+**Improve access to information**
+
+Textual descriptions can be lengthy and hard to read, and are frequently less precise than a visual depiction showing data points and axes.
+
+**Summarise content**
+
+Visual displays allow for summarising complex textual content, aiding the reader in memorising key points.
 
 ## Communicating insights with data visualisation
 
-John Snow collected data on cholera deaths and created a visualisation where the number of deaths was represented by the height of a bar at the corresponding address in London. This visualisation showed that the deaths clustered around Broad Street, which helped identify the cause of the cholera transmission, the Broad Street water pump.
+::: columns
+::: {.column width="60%"}
 
-![](images/Snow-cholera-map.jpg){fig-align="center" fig-alt="John Snow cholera map" width=60%}
+John Snow collected data on cholera deaths and created a visualisation where the number of deaths was represented by the height of a bar at the corresponding address in London.
+
+This visualisation showed that the deaths clustered around Broad Street, which helped identify the cause of the cholera transmission, the Broad Street water pump.
 
 Snow. 1854.
+
+:::
+
+::: {.column width="40%"}
+![](images/Snow-cholera-map.jpg){fig-align="center" fig-alt="John Snow cholera map" width=100%}
+
+:::
+
+:::
 
 # Tips for better charts {background-color="#D9DBDB"}
 
 ## Choosing a chart type
 
+::: columns
+::: {.column width="35%"}
 What is the purpose of the chart?
 
-. . . 
+Try: [ft-interactive.github.io/visual-vocabulary](https://ft-interactive.github.io/visual-vocabulary/)
 
-![](images/visual-vocabulary.png){fig-align="center" fig-alt="Screenshot of visual vocabulary website" width="70%"}
-::: {.center}
-[ft-interactive.github.io/visual-vocabulary](https://ft-interactive.github.io/visual-vocabulary/)
+:::
+
+::: {.column width="65%"}
+![](images/visual-vocabulary.png){fig-align="center" fig-alt="Screenshot of visual vocabulary website" width="100%"}
+:::
+
 :::
 
 ## Why do people hate pie charts?
 
-![](images/hate.gif){fig-align="center" fig-alt="Taylor Swift hate gif" width=60%}
+![](images/hate.gif){fig-align="center" fig-alt="Taylor Swift hate gif" width=50%}
 
 ::: {.center}
 
@@ -147,6 +173,8 @@ What is the purpose of the chart?
 
 ```{r}
 #| label: pie-uneven
+#| fig-height: 7
+#| fig-width: 7
 par(mai = c(0, 0, 0, 0))
 pie(x = c(11, 1), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
 ```
@@ -157,6 +185,8 @@ pie(x = c(11, 1), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
 
 ```{r}
 #| label: pie-even
+#| fig-height: 7
+#| fig-width: 7
 par(mai = c(0, 0, 0, 0))
 pie(x = c(6.5, 5.5), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 2)
 ```
@@ -195,6 +225,8 @@ pie(x = c(6.5, 5.5), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 
 
 ## Layouts
 
+facet layout example
+
 ## Lines
 
 ::: columns
@@ -205,6 +237,8 @@ pie(x = c(6.5, 5.5), labels = LETTERS[1:2], col = brewer.pal(2, "Dark2"), cex = 
 
 ::: {.column width="50%"}
 ```{r}
+#| label: lines
+#| fig-height: 7
 ggplot(data.frame(x = LETTERS[1:5], y = c(1, 4, 2, 5, 9)),
        aes(x = x, y = y)) +
   geom_col() +
@@ -213,8 +247,6 @@ ggplot(data.frame(x = LETTERS[1:5], y = c(1, 4, 2, 5, 9)),
 ```
 :::
 :::
-
-
 
 ## Colours
 
@@ -228,14 +260,51 @@ Why use colours in data visualisation?
 
 ## Colours
 
-Different types of colour palettes
+::: columns
 
-![](images/styling-palettes.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="70%"}
+::: {.column}
+Different types of colour palettes...
+
+<br>
+
+... for different types of data.
+:::
+
+::: {.column}
+![](images/styling-palettes.png){fig-align="center" fig-alt="Examples of sequential, diverging, and qualitative palettes" width="90%"}
+:::
+
+:::
 
 
 ## Colours
 
-Check for accessibility issues
+Is this a good choice of colour?
+
+```{r}
+#| label: diamonds-bar
+#| fig-width: 12
+#| fig-align: center
+g <- diamonds |> 
+  mutate(cut = as.character(cut),
+         cut = factor(cut, levels = c("Fair", "Good", "Very Good", "Premium", "Ideal"))) |> 
+  ggplot() +
+  geom_bar(aes(x = cut, fill = cut)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+g
+```
+
+## Colours
+
+Check for colourblind friendly plots with `colorblindr::cvd_grid(g)`.
+
+```{r}
+#| label: cvd-grid
+#| fig-width: 9
+#| fig-align: center
+theme_set(theme_grey(base_size = 10))
+colorblindr::cvd_grid(g)
+```
 
 ## Colours
 
@@ -255,6 +324,10 @@ Check for accessibility issues
 
 ## Legends
 
+```{r}
+theme_set(theme_grey(base_size = 32))
+```
+
 -   Should not use up valuable space for data
 -   May be integrated into the figure
 
@@ -267,7 +340,7 @@ Check for accessibility issues
 ## Useful resources
 
 ::: columns
-::: {.column width="50%"}
+::: {.column width="60%"}
 * Fundamentals of data visualization: [clauswilke.com/dataviz](https://clauswilke.com/dataviz/)
 
 * R Graphics Cookbook: [r-graphics.org](https://r-graphics.org/)
@@ -277,9 +350,9 @@ Check for accessibility issues
 * DataWrapper Blog: [blog.datawrapper.de](https://blog.datawrapper.de/)
 :::
 
-::: {.column width="50%"}
+::: {.column width="40%"}
 
-![](images/tt.png){fig-alt="TidyTuesday logo" width="80%"}
+![](images/tt.png){fig-alt="TidyTuesday logo" width="90%"}
 
 :::
 
@@ -288,12 +361,12 @@ Check for accessibility issues
 ## Good charts don't have to be boring!
 
 ::: columns
-::: {.column}
-![Cara Thompson (cararthompson.com)](https://raw.githubusercontent.com/cararthompson/tidytuesdays/main/plots/202209_lego.png){fig-alt="Stacked diverging bar chart of lego colours" width="100%"}
+::: {.column .fragment}
+![Cara Thompson (cararthompson.com)](https://raw.githubusercontent.com/cararthompson/tidytuesdays/main/plots/202209_lego.png){fig-alt="Stacked diverging bar chart of lego colours" width="98%"}
 :::
 
 ::: {.column .fragment}
-![Cedric Scherer (cedricscherer.com)](https://www.cedricscherer.com/img/gallery-tidytuesday//TidyTuesday_Week_2020_41_NCAA_Womens_Basketball.jpg){fig-alt="small multiples are charts of college basketball" width="100%"}
+![Cedric Scherer (cedricscherer.com)](https://www.cedricscherer.com/img/gallery-tidytuesday//TidyTuesday_Week_2020_41_NCAA_Womens_Basketball.jpg){fig-alt="small multiples are charts of college basketball" width="90%"}
 :::
 :::
 
@@ -318,11 +391,11 @@ In groups, discuss the following chart. How could you improve it?
 ::: columns
 
 ::: {.column}
-![](images/economist1.png){fig-align="center" fig-alt="Bar chart from the economist" width=80%}
+![](images/economist1.png){fig-align="center" fig-alt="Bar chart from the economist" width=85%}
 :::
 
 ::: {.column .fragment}
-![](images/economist2.png){fig-align="center" fig-alt="Improved bar chart from the economist" width=80%}
+![](images/economist2.png){fig-align="center" fig-alt="Improved bar chart from the economist" width=85%}
 :::
 
 :::
@@ -349,18 +422,30 @@ countdown::countdown(minutes = 5,
 
 ## Exercise 2
 
+::: columns
+
+::: {.column}
 This data set is from a study published in 1757 in A Treatise on the Scurvy in Three Parts, by James Lind.
 
 "*Pages 149-153 are a rare gem among what can be generously described as 400+ pages of evidence-free blathering, and these 4 pages may represent the first report of a controlled clinical trial.*"
+:::
+
+::: {.column .scrolling}
 
 ```{r}
 #| label: scurvy-data
 library(medicaldata)
 data("scurvy")
-kable(scurvy) |> 
-  kable_styling() |> 
-  scroll_box(width = "100%", height = "50%")
+kbl(scurvy) |> 
+  kable_styling(bootstrap_options = c("striped"), fixed_thead = T)
 ```
+
+:::
+
+:::
+
+
+
 
 ## Exercise 2
 
@@ -370,6 +455,7 @@ Edit the code to improve this chart:
 #| label: ex-2
 #| echo: true
 #| output-location: column
+#| fig-height: 5
 library(ggplot2)
 library(medicaldata)
 data("scurvy")
@@ -379,7 +465,8 @@ ggplot(data = scurvy) +
     x = study_id,
     y = gum_rot_d6,
     fill = treatment
-  ))
+  )) +
+  theme(legend.position = "bottom")
 ```
 
 
@@ -399,11 +486,29 @@ countdown::countdown(minutes = 13,
 
 ## Exercise 3
 
-Bring your own chart! (Or make a new one)
+Bring your own chart! (Or make a new one!)
+
+::: columns
+
+::: {.column}
+Data sources:
 
 * `library(medicaldata)`
 
 * #TidyTuesday: [github.com/rfordatascience/tidytuesday](https://github.com/rfordatascience/tidytuesday)
+
+:::
+
+::: {.column .center}
+
+![](images/dog.gif){fig-align="center" fig-alt="Gif of labrador painting" width=60%}
+
+<small>Source: <a href="https://giphy.com/gifs/dog-human-painting-4y6DqPvlICp5S">giphy.com</a></small>
+
+:::
+
+:::
+
 
 ## Workshop resources
 
