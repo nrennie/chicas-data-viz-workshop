@@ -494,7 +494,6 @@ or use {ggtext} to colour font in the subtitle...
 
 ## Fonts
 
-::: incremental
 -   Font size: larger fonts are (usually) better
 
 -   Font colour: ensure sufficient contrast
@@ -502,6 +501,11 @@ or use {ggtext} to colour font in the subtitle...
 -   Font face: highlight text using bold font, avoid italics
 
 -   Font family: choose a clear font with distinguishable features (pick something familiar)
+
+::: {.fragment .center}
+
+There is no *perfect* font.
+
 :::
 
 ## Key points
@@ -599,20 +603,22 @@ countdown::countdown(minutes = 5,
 
 ::: columns
 
-::: {.column}
+::: {.column width="40%"}
 This data set is from a study published in 1757 in A Treatise on the Scurvy in Three Parts, by James Lind.
 
 "*Pages 149-153 are a rare gem among what can be generously described as 400+ pages of evidence-free blathering, and these 4 pages may represent the first report of a controlled clinical trial.*"
 :::
 
-::: {.column .scrolling}
+::: {.column width="60%" .scrolling .scrollable}
 
 ```{r}
 #| label: scurvy-data
 library(medicaldata)
 data("scurvy")
-kbl(scurvy) |> 
-  kable_styling(bootstrap_options = c("striped"), fixed_thead = T)
+scurvy |> 
+  kbl(format = "html") |> 
+  kable_styling(bootstrap_options = c("striped"), fixed_thead = T) |> 
+  scroll_box(height = "600px")
 ```
 
 :::
@@ -644,7 +650,7 @@ ggplot(data = scurvy) +
 
 ```{r}
 #| label: ex-2-timer
-countdown::countdown(minutes = 13,
+countdown::countdown(minutes = 15,
                     color_border = "#b20e10",
                     color_text = "#b20e10",
                     color_running_text = "white",

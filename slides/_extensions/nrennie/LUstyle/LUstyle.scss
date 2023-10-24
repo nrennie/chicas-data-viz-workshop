@@ -105,6 +105,6 @@ section.has-dark-background a, section.has-dark-background a:hover {
 }
 
 .scrolling {
-  max-height: 500px;
-  overflow-y: auto;
+  overflow-x: auto;
+  white-space: nowrap
 }
