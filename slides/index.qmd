@@ -697,7 +697,7 @@ GitHub: [github.com/nrennie/chicas-data-viz-workshop](https://github.com/nrennie
 Slides: [nrennie.github.io/chicas-data-viz-workshop](https://nrennie.github.io/chicas-data-viz-workshop)
 :::
 
-::: {.column .center}
+::: {.column .center .fragment}
 
 
 Questions?
