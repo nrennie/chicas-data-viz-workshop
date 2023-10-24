@@ -103,3 +103,8 @@ section.has-dark-background a, section.has-dark-background a:hover {
 .center {
   text-align: center !important
 }
+
+.scrolling {
+  max-height: 500px;
+  overflow-y: auto;
+}
