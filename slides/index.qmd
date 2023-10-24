@@ -619,9 +619,6 @@ kbl(scurvy) |>
 
 :::
 
-
-
-
 ## Exercise 2
 
 Edit the code to improve this chart:
