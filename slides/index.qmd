@@ -690,17 +690,15 @@ Data sources:
 
 ## Workshop resources
 
-::: columns
-
-::: {.column}
 GitHub: [github.com/nrennie/chicas-data-viz-workshop](https://github.com/nrennie/chicas-data-viz-workshop)
 
 <br>
 
 Slides: [nrennie.github.io/chicas-data-viz-workshop](https://nrennie.github.io/chicas-data-viz-workshop)
-:::
 
-::: {.column .fragment}
+<br>
+
+::: {.fragment}
 
 
 Questions?
@@ -709,7 +707,6 @@ Questions?
 
 :::
 
-:::
 
 
 
