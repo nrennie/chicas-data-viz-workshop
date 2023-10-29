@@ -2,6 +2,8 @@
 
 Data Visualisation Workshop delivered to CHICAS PhD students in November 2023. 
 
+Slides: [nrennie.github.io/chicas-data-viz-workshop](https://nrennie.github.io/chicas-data-viz-workshop/)
+
 ## Workshop outline
 
 * 30 mins presentation: covering principles of data visualisations (based on [royal-statistical-society.github.io/datavisguide](https://royal-statistical-society.github.io/datavisguide/)).
