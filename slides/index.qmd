@@ -79,7 +79,8 @@ dino_data |>
   summarise(mean_x = mean(x),
             mean_y = mean(y),
             sd_x = sd(x),
-            sd_y = sd(y)) |> 
+            sd_y = sd(y),
+            cor_xy = cor(x, y)) |> 
   pivot_longer(-1, names_to = "Dataset") %>%
   pivot_wider(names_from = 1, values_from = value) |> 
   kbl() |> 
@@ -340,6 +341,13 @@ diamonds |>
   geom_bar(aes(x = cut)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+## Layouts, aspect ratios, and axes
+
+Order based on magnitude unless the category order has meaning...
+
+![](images/georgia.jpg){fig-align="center" fig-alt="Badly ordered chart of covid cases" width=90%}
+Source: Georgia Department of Public Health
 
 ## Lines
 
