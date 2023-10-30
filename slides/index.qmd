@@ -346,7 +346,8 @@ diamonds |>
 
 Order based on magnitude unless the category order has meaning...
 
-![](images/georgia.jpg){fig-align="center" fig-alt="Badly ordered chart of covid cases" width=90%}
+![](images/georgia.jpg){fig-align="center" fig-alt="Badly ordered chart of covid cases" width=70%}
+
 Source: Georgia Department of Public Health
 
 ## Lines
